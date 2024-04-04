@@ -1159,7 +1159,7 @@ export default {
           const now = Date.now();
           // calculate and expiration time 5 minutes sooner and adjust to milliseconds
           // to compare with now.
-          const expiration = (decoded.payload.exp - (5 * 60)) * 1000;
+          const expiration = (decoded.exp - (5 * 60)) * 1000;
           if (now > expiration) {
             return true;
           }

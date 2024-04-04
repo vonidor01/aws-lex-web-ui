@@ -32,13 +32,11 @@ export default {
     if (state.tokens && state.tokens.idtokenjwt) {
       const decoded = jwtDecode(state.tokens.idtokenjwt);
       if (decoded) {
-        if (decoded.payload) {
-          if (decoded.payload.email) {
-            v = decoded.payload.email;
-          }
-          if (decoded.payload.preferred_username) {
-            v = decoded.payload.preferred_username;
-          }
+        if (decoded.email) {
+          v = decoded.email;
+        }
+        if (decoded.preferred_username) {
+          v = decoded.preferred_username;
         }
       }
       return `[${v}]`;
@@ -50,10 +48,8 @@ export default {
     if (state.tokens && state.tokens.idtokenjwt) {
       const decoded = jwtDecode(state.tokens.idtokenjwt);
       if (decoded) {
-        if (decoded.payload) {
-          if (decoded.payload.preferred_username) {
-            v = decoded.payload.preferred_username;
-          }
+        if (decoded.preferred_username) {
+          v = decoded.preferred_username;
         }
       }
       return `[${v}]`;

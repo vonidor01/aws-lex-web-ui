@@ -16,6 +16,7 @@
 import { ConfigLoader } from './config-loader';
 import { logout, login, completeLogin, completeLogout, getAuth, refreshLogin, isTokenExpired, forceLogin } from './loginutil';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
+const { CognitoIdentityClient } = require("@aws-sdk/client-cognito-identity");
 
 /**
  * Instantiates and mounts the chatbot component
@@ -59,14 +60,15 @@ export class FullPageComponentLoader {
   }
 
   async getCredentials(poolId, region, logins = {}) {
-    const credentialProvider = fromCognitoIdentityPool({
-      identityPoolId: poolId,
-      logins: logins,
-      clientConfig: { region: region },
-    })
-    const credentials = credentialProvider();
-    return credentials;
-}
+    const cognitoidentity = new CognitoIdentityClient({
+      credentials: fromCognitoIdentityPool({
+        client: new CognitoIdentityClient({region: region}),
+        identityPoolId: poolId,
+        logins: logins,
+      }),
+    });
+    return await cognitoidentity.config.credentials();
+  }
 
   /**
    * Send tokens to the Vue component and update the Vue component

@@ -152,7 +152,7 @@ function isTokenExpired(token) {
   const decoded = jwtDecode(token);
   if (decoded) {
     const now = Date.now();
-    const expiration = decoded.payload.exp * 1000;
+    const expiration = decoded.exp * 1000;
     if (now > expiration) {
       return true;
     }

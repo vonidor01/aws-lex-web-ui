@@ -17,6 +17,7 @@
 import { ConfigLoader } from './config-loader';
 import { logout, login, completeLogin, completeLogout, getAuth, refreshLogin, isTokenExpired, forceLogin } from './loginutil';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-providers';
+const { CognitoIdentityClient } = require("@aws-sdk/client-cognito-identity");
 
 /**
  * Instantiates and mounts the chatbot component in an iframe
@@ -516,16 +517,15 @@ export class IframeComponentLoader {
   /**
    * Get AWS credentials to pass to the chatbot UI
    */
-
-
   async getCredentials(poolId, region, logins = {}) {
-    const credentialProvider = fromCognitoIdentityPool({
-      identityPoolId: poolId,
-      logins: logins,
-      clientConfig: { region: region },
-    })
-    const credentials = credentialProvider();
-    return credentials;
+    const cognitoidentity = new CognitoIdentityClient({
+      credentials: fromCognitoIdentityPool({
+        client: new CognitoIdentityClient({region: region}),
+        identityPoolId: poolId,
+        logins: logins,
+      }),
+    });
+    return await cognitoidentity.config.credentials();
   }
 
   /**
@@ -541,7 +541,7 @@ export class IframeComponentLoader {
         evt.ports[0].postMessage({ event: 'resolve', type: evt.data.event });
       },
 
-      // requests credentials from the parent
+       // requests credentials from the parent
       getCredentials(evt) {
         const poolId = evt.target.iframeLoader.config.cognito.poolId;
         const region = evt.target.iframeLoader.config.cognito.region;
