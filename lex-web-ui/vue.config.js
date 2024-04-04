@@ -231,7 +231,7 @@ function chainWebpackApp(
     .end()
 
     // copy artifacts to dist directory
-    .plugin('copy')
+    .plugin('copy');/*
     .tap((args) => {
       // unshift to have lower precedence
       // from the default vue cli `public` rule
@@ -248,7 +248,7 @@ function chainWebpackApp(
         },
       );
       return args;
-    });
+    });*/
 }
 
 module.exports = {
