@@ -282,6 +282,8 @@ export default class {
       .then(creds => creds && this.initCredentials(creds))
       .then(async () => {
         const res = await this.lexRuntimeClient.send(command);
+        const byteArray = await res.audioStream.transformToByteArray();
+        res.audioStream = Buffer.from(byteArray);
         if (res.sessionState) {
           const oState = b64CompressedToObject(res.sessionState);
           res.sessionAttributes = oState.sessionAttributes ? oState.sessionAttributes : {};
